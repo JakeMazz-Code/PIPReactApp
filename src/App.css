@@ -189,7 +189,7 @@
 }
 
 .filter-select {
-  background: transparent;
+  background: var(--bg-elev);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--ink);
   padding: var(--space-8) var(--space-12);
@@ -198,6 +198,11 @@
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+}
+
+.filter-select option {
+  background: var(--bg-elev);
+  color: var(--ink);
 }
 
 .filter-select:focus {
