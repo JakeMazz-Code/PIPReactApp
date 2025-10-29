@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { filterCities } from '../utils/cities';
 
 function ControlsBar({
   onLocationChange,
@@ -9,6 +10,11 @@ function ControlsBar({
 }) {
   const [zipInput, setZipInput] = useState('');
   const [isGeolocating, setIsGeolocating] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const dropdownRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Load last used ZIP from localStorage
   useEffect(() => {
@@ -17,6 +23,76 @@ function ControlsBar({
       setZipInput(savedZip);
     }
   }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Handle input change and filter cities
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setZipInput(value);
+
+    // Only show suggestions for text input (not pure numbers)
+    if (value.length >= 2 && !/^\d+$/.test(value)) {
+      const filtered = filterCities(value);
+      setSuggestions(filtered);
+      setShowDropdown(filtered.length > 0);
+      setSelectedIndex(-1);
+    } else {
+      setShowDropdown(false);
+      setSuggestions([]);
+    }
+  };
+
+  // Handle suggestion click
+  const handleSuggestionClick = (city) => {
+    setZipInput(city.label);
+    setShowDropdown(false);
+    setSuggestions([]);
+    // Immediately submit
+    localStorage.setItem('lastZip', city.label);
+    onLocationChange({ zip: city.label, source: 'zip' });
+  };
+
+  // Handle keyboard navigation
+  const handleKeyDown = (e) => {
+    if (!showDropdown || suggestions.length === 0) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedIndex(prev =>
+          prev < suggestions.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedIndex(prev => (prev > 0 ? prev - 1 : -1));
+        break;
+      case 'Enter':
+        if (selectedIndex >= 0) {
+          e.preventDefault();
+          handleSuggestionClick(suggestions[selectedIndex]);
+        }
+        break;
+      case 'Escape':
+        setShowDropdown(false);
+        setSuggestions([]);
+        setSelectedIndex(-1);
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleUseMyLocation = () => {
     setIsGeolocating(true);
@@ -69,15 +145,35 @@ function ControlsBar({
           {isGeolocating ? 'Locating...' : 'Use My Location'}
         </button>
 
-        <form onSubmit={handleZipSubmit} className="zip-form">
-          <input
-            type="text"
-            value={zipInput}
-            onChange={(e) => setZipInput(e.target.value)}
-            placeholder="ZIP or City, ST"
-            className="zip-input"
-            aria-label="ZIP code or city"
-          />
+        <form onSubmit={handleZipSubmit} className="zip-form" ref={dropdownRef}>
+          <div className="autocomplete-wrapper">
+            <input
+              ref={inputRef}
+              type="text"
+              value={zipInput}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="ZIP or City, ST"
+              className="zip-input"
+              aria-label="ZIP code or city"
+              autoComplete="off"
+            />
+            {showDropdown && suggestions.length > 0 && (
+              <div className="autocomplete-dropdown">
+                {suggestions.map((city, index) => (
+                  <div
+                    key={city.label}
+                    className={`autocomplete-item ${index === selectedIndex ? 'selected' : ''}`}
+                    onClick={() => handleSuggestionClick(city)}
+                    onMouseEnter={() => setSelectedIndex(index)}
+                  >
+                    <span className="city-name">{city.name}</span>
+                    <span className="state-code">{city.state}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           <button type="submit" className="zip-submit">Go</button>
         </form>
 

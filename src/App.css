@@ -118,6 +118,11 @@
 .zip-form {
   display: flex;
   gap: var(--space-8);
+  position: relative;
+}
+
+.autocomplete-wrapper {
+  position: relative;
 }
 
 .zip-input {
@@ -127,7 +132,7 @@
   padding: var(--space-8) var(--space-12);
   font-size: var(--font-12);
   font-family: var(--font-base);
-  width: 120px;
+  width: 180px;
   transition: border-color var(--duration) var(--easing);
 }
 
@@ -158,6 +163,58 @@
 
 .zip-submit:hover {
   border-color: var(--ink);
+}
+
+/* Autocomplete Dropdown */
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--space-4);
+  background: var(--bg-elev);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.autocomplete-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-8) var(--space-12);
+  cursor: pointer;
+  transition: all var(--duration) var(--easing);
+  border-bottom: var(--hairline);
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 2px solid var(--ink);
+  padding-left: calc(var(--space-12) - 2px);
+}
+
+.autocomplete-item .city-name {
+  font-size: var(--font-12);
+  font-weight: 600;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.autocomplete-item .state-code {
+  font-size: var(--font-12);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .location-name {
