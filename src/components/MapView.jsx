@@ -14,6 +14,7 @@ function MapView({ quakes, userLocation, selectedQuake, onSelectQuake }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markersRef = useRef([]);
+  const fitBoundsTimeoutRef = useRef(null);
 
   // Initialize map
   useEffect(() => {
@@ -31,6 +32,10 @@ function MapView({ quakes, userLocation, selectedQuake, onSelectQuake }) {
     mapInstanceRef.current = map;
 
     return () => {
+      // Cleanup
+      if (fitBoundsTimeoutRef.current) {
+        clearTimeout(fitBoundsTimeoutRef.current);
+      }
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
@@ -41,6 +46,12 @@ function MapView({ quakes, userLocation, selectedQuake, onSelectQuake }) {
   // Update map center when user location changes
   useEffect(() => {
     if (mapInstanceRef.current && userLocation) {
+      // Clear any pending fitBounds
+      if (fitBoundsTimeoutRef.current) {
+        clearTimeout(fitBoundsTimeoutRef.current);
+        fitBoundsTimeoutRef.current = null;
+      }
+
       mapInstanceRef.current.setView(
         [userLocation.latitude, userLocation.longitude],
         9,
@@ -117,12 +128,18 @@ function MapView({ quakes, userLocation, selectedQuake, onSelectQuake }) {
         const group = L.featureGroup(markersRef.current);
         const bounds = group.getBounds();
         if (bounds.isValid()) {
+          // Clear any existing timeout
+          if (fitBoundsTimeoutRef.current) {
+            clearTimeout(fitBoundsTimeoutRef.current);
+          }
+
           // Small delay to allow initial centering to complete
-          setTimeout(() => {
+          fitBoundsTimeoutRef.current = setTimeout(() => {
             if (mapInstanceRef.current) {
               mapInstanceRef.current.fitBounds(bounds.pad(0.1), { animate: true, duration: 0.5 });
             }
-          }, 100);
+            fitBoundsTimeoutRef.current = null;
+          }, 300);
         }
       } catch (error) {
         console.warn('Map bounds fitting skipped:', error.message);
