@@ -51,9 +51,8 @@ function QuakeList({ quakes, userLocation, selectedQuakeId, onSelectQuake }) {
   if (!quakes.length) {
     return (
       <div className="empty-state">
-        <div className="empty-icon">🔍</div>
-        <h3>No earthquakes found</h3>
-        <p>Try expanding your search radius or time window.</p>
+        <h3>No Earthquakes Detected</h3>
+        <p>Expand search radius or time window</p>
       </div>
     );
   }

@@ -23,7 +23,7 @@ function QuakeCard({ quake, distance, isLikelyMatch, isSelected, onClick }) {
     >
       {isLikelyMatch && (
         <div className="likely-match-badge" aria-label="Likely match based on time and distance">
-          ⭐ Likely Match
+          Likely Match
         </div>
       )}
 
@@ -40,13 +40,13 @@ function QuakeCard({ quake, distance, isLikelyMatch, isSelected, onClick }) {
 
       <div className="quake-details">
         <span className="detail-item">
-          🕐 {formatTimeAgo(properties.time)}
+          {formatTimeAgo(properties.time)}
         </span>
         <span className="detail-item">
-          📏 {distance.toFixed(1)} mi away
+          {distance.toFixed(1)} mi
         </span>
         <span className="detail-item">
-          ⬇️ Depth: {depth.toFixed(1)} km
+          {depth.toFixed(1)} km depth
         </span>
       </div>
 
@@ -54,17 +54,17 @@ function QuakeCard({ quake, distance, isLikelyMatch, isSelected, onClick }) {
         <div className="quake-intensity">
           {properties.felt && (
             <span className="detail-item">
-              👥 DYFI: {properties.felt} reports
+              DYFI: {properties.felt}
             </span>
           )}
           {properties.cdi && (
             <span className="detail-item">
-              📊 CDI: {properties.cdi.toFixed(1)}
+              CDI: {properties.cdi.toFixed(1)}
             </span>
           )}
           {properties.mmi && (
             <span className="detail-item">
-              📈 MMI: {properties.mmi.toFixed(1)}
+              MMI: {properties.mmi.toFixed(1)}
             </span>
           )}
         </div>
@@ -72,7 +72,7 @@ function QuakeCard({ quake, distance, isLikelyMatch, isSelected, onClick }) {
 
       {properties.tsunami === 1 && (
         <div className="tsunami-warning" role="alert">
-          🌊 Tsunami Warning
+          Tsunami Warning
         </div>
       )}
 
@@ -85,7 +85,7 @@ function QuakeCard({ quake, distance, isLikelyMatch, isSelected, onClick }) {
           onClick={(e) => e.stopPropagation()}
           aria-label="View detailed information on USGS website"
         >
-          View on USGS →
+          View Details
         </a>
         <a
           href={getDYFIUrl(id)}
@@ -95,7 +95,7 @@ function QuakeCard({ quake, distance, isLikelyMatch, isSelected, onClick }) {
           onClick={(e) => e.stopPropagation()}
           aria-label="Report if you felt this earthquake"
         >
-          Did You Feel It? →
+          Report DYFI
         </a>
       </div>
     </div>

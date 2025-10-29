@@ -578,10 +578,6 @@
   gap: var(--space-16);
 }
 
-.error-icon {
-  font-size: var(--font-40);
-}
-
 .error-message {
   font-size: var(--font-14);
   color: var(--accent-warn);
@@ -618,11 +614,6 @@
   justify-content: center;
   padding: var(--space-64);
   text-align: center;
-}
-
-.empty-icon {
-  font-size: var(--font-40);
-  margin-bottom: var(--space-16);
 }
 
 .empty-state h3 {

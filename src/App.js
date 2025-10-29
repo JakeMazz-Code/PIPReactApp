@@ -101,8 +101,8 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
-        <h1>Was That an Earthquake? Near-Me</h1>
-        <p className="subtitle">Instantly check if there was a quake near you</p>
+        <h1>Seismic Activity Monitor</h1>
+        <p className="subtitle">Real-time earthquake detection and analysis</p>
       </header>
 
       <ControlsBar
@@ -115,8 +115,8 @@ function App() {
 
       {!userLocation && !loading && !error && (
         <div className="welcome-message">
-          <h2>Welcome!</h2>
-          <p>Click "Use My Location" or enter a ZIP code to get started.</p>
+          <h2>Seismic Event Monitor</h2>
+          <p>Set location to begin tracking</p>
         </div>
       )}
 

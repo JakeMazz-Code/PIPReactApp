@@ -5,7 +5,7 @@ function LoadingError({ loading, error, onRetry }) {
     return (
       <div className="loading-container">
         <div className="spinner"></div>
-        <p>Fetching earthquake data...</p>
+        <p>Loading seismic data</p>
       </div>
     );
   }
@@ -13,7 +13,6 @@ function LoadingError({ loading, error, onRetry }) {
   if (error) {
     return (
       <div className="error-container">
-        <div className="error-icon">⚠️</div>
         <p className="error-message">{error}</p>
         {onRetry && (
           <button onClick={onRetry} className="retry-button">

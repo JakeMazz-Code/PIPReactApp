@@ -65,7 +65,7 @@ function ControlsBar({
           className="location-button"
           aria-label="Use my current location"
         >
-          {isGeolocating ? '📍 Locating...' : '📍 Use My Location'}
+          {isGeolocating ? 'Locating...' : 'Use My Location'}
         </button>
 
         <form onSubmit={handleZipSubmit} className="zip-form">
@@ -84,7 +84,7 @@ function ControlsBar({
 
         {locationName && (
           <span className="location-name" aria-live="polite">
-            📌 {locationName}
+            {locationName}
           </span>
         )}
       </div>
@@ -135,7 +135,7 @@ function ControlsBar({
         </div>
 
         <button onClick={onRefresh} className="refresh-button" aria-label="Refresh earthquake data">
-          🔄 Refresh
+          Refresh
         </button>
       </div>
     </div>
