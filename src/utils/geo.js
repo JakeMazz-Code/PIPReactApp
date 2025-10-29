@@ -29,13 +29,29 @@ export function kmToMiles(km) {
   return km * 0.621371;
 }
 
-// Fetch coordinates from ZIP code using Zippopotam.us API
-export async function getCoordinatesFromZip(zip) {
+// Fetch coordinates from ZIP code or City, State using Zippopotam.us API
+// Accepts: "90210" or "Los Angeles, CA" or "New York, NY"
+export async function getCoordinatesFromZip(input) {
   try {
-    const response = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    let url;
+
+    // Check if input is a 5-digit ZIP code
+    if (/^\d{5}$/.test(input.trim())) {
+      url = `https://api.zippopotam.us/us/${input.trim()}`;
+    }
+    // Check if input is "City, ST" format
+    else if (/^[a-zA-Z\s]+,\s*[A-Z]{2}$/.test(input.trim())) {
+      const [city, state] = input.split(',').map(s => s.trim());
+      url = `https://api.zippopotam.us/us/${state}/${encodeURIComponent(city)}`;
+    }
+    else {
+      throw new Error('Enter ZIP code (e.g., 90210) or City, ST (e.g., Los Angeles, CA)');
+    }
+
+    const response = await fetch(url);
 
     if (!response.ok) {
-      throw new Error('Invalid ZIP code');
+      throw new Error('Location not found');
     }
 
     const data = await response.json();
@@ -48,7 +64,7 @@ export async function getCoordinatesFromZip(zip) {
       };
     }
 
-    throw new Error('No location found for ZIP code');
+    throw new Error('No location found');
   } catch (error) {
     throw new Error(`Failed to fetch coordinates: ${error.message}`);
   }

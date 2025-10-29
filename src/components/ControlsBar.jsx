@@ -46,13 +46,14 @@ function ControlsBar({
 
   const handleZipSubmit = (e) => {
     e.preventDefault();
-    const zip = zipInput.trim();
+    const input = zipInput.trim();
 
-    if (zip && /^\d{5}$/.test(zip)) {
-      localStorage.setItem('lastZip', zip);
-      onLocationChange({ zip, source: 'zip' });
+    // Accept ZIP code (12345) or City, ST (Los Angeles, CA)
+    if (input && (/^\d{5}$/.test(input) || /^[a-zA-Z\s]+,\s*[A-Z]{2}$/.test(input))) {
+      localStorage.setItem('lastZip', input);
+      onLocationChange({ zip: input, source: 'zip' });
     } else {
-      alert('Please enter a valid 5-digit ZIP code');
+      alert('Enter ZIP (e.g., 90210) or City, ST (e.g., Los Angeles, CA)');
     }
   };
 
@@ -73,11 +74,9 @@ function ControlsBar({
             type="text"
             value={zipInput}
             onChange={(e) => setZipInput(e.target.value)}
-            placeholder="Enter ZIP code"
-            maxLength="5"
-            pattern="\d{5}"
+            placeholder="ZIP or City, ST"
             className="zip-input"
-            aria-label="ZIP code"
+            aria-label="ZIP code or city"
           />
           <button type="submit" className="zip-submit">Go</button>
         </form>
