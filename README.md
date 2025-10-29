@@ -179,6 +179,10 @@ The event with the **lowest score** within 90 minutes and search radius gets the
 
 5. **Refresh**: Click "🔄 Refresh" to fetch latest data
 
+### Known Issue
+
+When switching to the **7 days** time window, the map may zoom to fit all earthquakes in the larger dataset. If this happens, simply **zoom out manually** using the map controls (+ / - buttons) to see your location and all markers.
+
 ## API Endpoints
 
 ### USGS Earthquake Query
@@ -278,6 +282,96 @@ MIT License - feel free to use this project for learning or personal use.
 - **Maps**: [CARTO](https://carto.com/attributions) & [OpenStreetMap contributors](https://www.openstreetmap.org/copyright)
 - **Geolocation**: [Zippopotam.us](https://www.zippopotam.us/)
 - **Design Inspiration**: [Anduril Industries](https://www.anduril.com/)
+
+## AI Assistance
+
+This project was developed with assistance from **Claude Code** (Anthropic's Claude Sonnet 4.5), an AI-powered development tool.
+
+### What AI Tools Were Used
+
+- **Claude Code**: Primary AI assistant for code generation, debugging, and architecture decisions
+- **Tool**: VSCode extension with integrated terminal, file editing, and code analysis capabilities
+
+### What AI Helped With
+
+1. **Project Architecture & Setup**
+   - Initial React project structure and component hierarchy
+   - Integration of Leaflet maps with React functional components
+   - Design system implementation following Anduril-inspired aesthetic guidelines
+
+2. **API Integration**
+   - USGS Earthquake API query building and error handling
+   - Zippopotam.us ZIP code geocoding integration
+   - CARTO Dark Matter basemap configuration
+
+3. **Core Features**
+   - Haversine distance calculation algorithm
+   - "Likely Match" scoring system design and implementation
+   - Real-time filter updates with React hooks (useState, useEffect, useCallback)
+
+4. **UI/UX Components**
+   - City/state autocomplete dropdown with keyboard navigation
+   - Interactive Leaflet map with custom markers and popups
+   - Responsive CSS Grid layout with professional dark theme
+
+5. **Debugging & Fixes**
+   - Leaflet map initialization errors
+   - Dropdown text visibility issues on dark backgrounds
+   - Map centering and bounds fitting behavior
+   - Git workflow and commit management
+
+### What Was Learned
+
+1. **React Patterns**
+   - Proper use of refs (useRef) for managing Leaflet map instances without triggering re-renders
+   - Effect dependency arrays and how object references can cause unintended re-renders
+   - Separating concerns between state management (App.js) and UI components
+
+2. **Leaflet Integration**
+   - How to integrate imperative Leaflet API with declarative React patterns
+   - Custom marker creation with divIcon for dynamic styling
+   - Managing map lifecycle (initialization, cleanup, bounds fitting)
+
+3. **API Best Practices**
+   - Building query strings with proper encoding and parameter validation
+   - Handling missing/optional fields in API responses (felt, cdi, mmi)
+   - Converting between UTC timestamps and user-friendly time formats
+
+4. **Design Systems**
+   - Implementing a cohesive design language with CSS custom properties
+   - Monochrome-first approach with restrained accent colors
+   - Consistent spacing scales and subtle animations
+
+5. **Git Workflow**
+   - Using git reset to revert problematic changes
+   - Importance of committing working states before experimental changes
+   - Documenting known issues instead of overengineering fixes
+
+### Modifications Made to AI Suggestions
+
+1. **Map Behavior**
+   - Initially attempted multiple complex solutions for preventing map snapping on filter changes
+   - After several iterations broke functionality, reverted to working commit and documented the behavior as a known issue
+   - Learned that simpler solutions (or accepting minor quirks) can be better than over-engineering
+
+2. **City Search Feature**
+   - AI suggested major API changes initially
+   - Modified approach to use existing Zippopotam.us API with "City, ST" format
+   - Added autocomplete dropdown for better UX (AI suggestion implemented successfully)
+
+3. **Professional Aesthetic**
+   - AI initially included emojis throughout the UI
+   - Removed all emojis per requirements for more professional Anduril-style design
+   - Kept language minimal and technical rather than casual
+
+4. **Error Handling**
+   - Enhanced AI-generated try-catch blocks with more specific user-facing error messages
+   - Added validation for ZIP code and city/state input formats
+   - Improved handling of edge cases (no results, API timeouts)
+
+### Reflection
+
+AI assistance dramatically accelerated development, particularly for boilerplate code, API integration, and design system implementation. However, debugging complex interaction issues (like the map snapping problem) revealed the importance of understanding underlying libraries (Leaflet, React lifecycle) rather than blindly applying AI suggestions. The iterative debugging process, while ultimately unsuccessful in fixing the 7-day map issue, provided valuable learning about React refs, effect dependencies, and when to accept trade-offs instead of pursuing perfect solutions.
 
 ## Disclaimer
 
