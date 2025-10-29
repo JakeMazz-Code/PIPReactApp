@@ -112,12 +112,17 @@ function MapView({ quakes, userLocation, selectedQuake, onSelectQuake }) {
     });
 
     // Fit bounds to show all markers (with safety check)
-    if (markersRef.current.length > 0) {
+    if (markersRef.current.length > 1) {
       try {
         const group = L.featureGroup(markersRef.current);
         const bounds = group.getBounds();
         if (bounds.isValid()) {
-          mapInstanceRef.current.fitBounds(bounds.pad(0.1), { animate: false });
+          // Small delay to allow initial centering to complete
+          setTimeout(() => {
+            if (mapInstanceRef.current) {
+              mapInstanceRef.current.fitBounds(bounds.pad(0.1), { animate: true, duration: 0.5 });
+            }
+          }, 100);
         }
       } catch (error) {
         console.warn('Map bounds fitting skipped:', error.message);
